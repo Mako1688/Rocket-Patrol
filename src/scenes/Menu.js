@@ -82,9 +82,5 @@ class Menu extends Phaser.Scene {
             this.sound.play('sfx-select')
             this.scene.start('playScene')
         }
-
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene")
-        }
     }
 }
