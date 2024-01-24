@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     create() {
         //place tile sprites
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0)
+        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield-new').setOrigin(0, 0)
 
         //green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0,0)
@@ -30,8 +30,9 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
 
-        //initialize score
+        //initialize scores
         this.p1Score = 0
+        this.highScore = localStorage.getItem('rocketPatrolHighScore') || 0;
 
         //display score
         let scoreConfig = {
@@ -46,7 +47,23 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig)
+
+        //high Score config
+        let highScoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+
+        //display scores
+        this.scoreLeft = this.add.text(borderUISize + borderPadding + game.config.width - 200, borderUISize + borderPadding*2, this.p1Score, scoreConfig)
+        this.highScoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'High Score: ' + this.highScore, highScoreConfig)
 
         //GAME OVER flag
         this.gameOver = false
@@ -80,6 +97,15 @@ class Play extends Phaser.Scene {
             this.ship01.update()
             this.ship02.update()
             this.ship03.update()
+            
+            //update high score if applicable
+            if(this.p1Score > this.highScore) {
+                this.highScore = this.p1Score
+                this.highScoreText.text = 'High Score: ' + this.highScore
+
+                //save high score to local storage
+                localStorage.setItem('rocketPatrolHighScore', this.highScore);
+            }
         }
         
 

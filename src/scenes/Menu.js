@@ -8,11 +8,13 @@ class Menu extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png')
         this.load.image('spaceship', './assets/spaceship.png')
         this.load.image('starfield', './assets/starfield.png')
+        this.load.image('starfield-new', './assets/starfield-new.png')
 
         //load audio
         this.load.audio('sfx-select', './assets/sfx-select.wav')
         this.load.audio('sfx-explosion', './assets/sfx-explosion.wav')
         this.load.audio('sfx-shot', './assets/sfx-shot.wav')
+        this.load.audio('gameMusic', './assets/gameMusic.m4a')
 
         //load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
@@ -61,22 +63,37 @@ class Menu extends Phaser.Scene {
         //define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+
+        //play background music
+        this.backgroundMusic = this.sound.add('gameMusic', {loop: true})
+        this.backgroundMusic.play()
+
     }
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            let random = Math.random()
+            let speed =3
+            if(random > 0.5) {
+                speed = -3
+            }
             //easy mode
             game.settings = {
-                spaceshipSpeed: 3,
+                spaceshipSpeed: speed,
                 gameTimer: 60000
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')
         }
         if(Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+            let random = Math.random()
+            let speed = 4
+            if(random > 0.5) {
+                speed = -4
+            }
             //hard mode
             game.settings = {
-                spaceshipSpeed: 4,
+                spaceshipSpeed: speed,
                 gameTimer: 45000
             }
             this.sound.play('sfx-select')
